@@ -111,7 +111,7 @@ class HaKamadoCard extends HTMLElement {
       rows: 6,
       min_rows: 5,
       columns: 12,
-      min_columns: 6,
+      min_columns: 4,
     };
   }
 
@@ -291,6 +291,8 @@ class HaKamadoCard extends HTMLElement {
       <style>
         :host {
           display: block;
+          container-type: inline-size;
+          container-name: kamado-card;
           --kamado-color: ${DEFAULT_COLOR};
           --kamado-dark: color-mix(in srgb, var(--kamado-color) 72%, black);
           --kamado-light: color-mix(in srgb, var(--kamado-color) 70%, white);
@@ -387,6 +389,7 @@ class HaKamadoCard extends HTMLElement {
         .pit-button {
           border: 0;
           width: 100%;
+          min-height: 44px;
           background: none;
           padding: 0;
         }
@@ -419,7 +422,7 @@ class HaKamadoCard extends HTMLElement {
           margin-top: 6px;
           border: 0;
           border-radius: 9px;
-          min-height: 32px;
+          min-height: 44px;
           background: var(--secondary-background-color, rgba(127,127,127,.12));
           cursor: pointer;
         }
@@ -464,6 +467,7 @@ class HaKamadoCard extends HTMLElement {
           border: 0;
           background: transparent;
           min-width: 0;
+          min-height: 44px;
           text-align: left;
           display: grid;
           grid-template-columns: auto 1fr auto;
@@ -498,6 +502,7 @@ class HaKamadoCard extends HTMLElement {
           border: 0;
           border-radius: 10px;
           min-width: 116px;
+          min-height: 44px;
           background: var(--secondary-background-color, rgba(127,127,127,.1));
           padding: 7px 10px;
           text-align: center;
@@ -505,24 +510,28 @@ class HaKamadoCard extends HTMLElement {
         .target strong { font-size: 15px; }
         .number-target {
           display: grid;
-          grid-template-columns: 30px 1fr 30px;
+          grid-template-columns: 44px minmax(0, 1fr) 44px;
           gap: 3px;
           padding: 3px;
-          min-width: 158px;
+          min-width: 170px;
         }
         .target-value {
           border: 0;
+          min-height: 44px;
           background: transparent;
           border-radius: 8px;
           padding: 2px 4px;
         }
         .adjust {
           border: 0;
+          min-width: 44px;
+          min-height: 44px;
           border-radius: 8px;
           background: color-mix(in srgb, var(--primary-text-color) 8%, transparent);
           cursor: pointer;
           font-size: 20px;
           line-height: 1;
+          touch-action: manipulation;
         }
         .adjust:hover, .fan-toggle:hover, .entity-link:hover { filter: brightness(.96); }
         .unavailable { opacity: .52; }
@@ -536,12 +545,95 @@ class HaKamadoCard extends HTMLElement {
           border-radius: 14px;
           padding: 20px;
         }
+        @container kamado-card (max-width: 620px) {
+          .layout {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+          .kamado-panel {
+            min-height: 300px;
+          }
+          .kamado-wrap {
+            width: min(100%, 300px);
+          }
+          .probe-slot {
+            grid-template-columns: 1fr;
+          }
+          .target,
+          .number-target {
+            width: 100%;
+            min-width: 0;
+          }
+        }
+
+        @container kamado-card (max-width: 420px) {
+          ha-card {
+            padding: 12px;
+          }
+          .header {
+            margin-bottom: 8px;
+          }
+          .title {
+            font-size: 18px;
+          }
+          .kamado-panel {
+            min-height: 275px;
+            padding: 8px;
+          }
+          .kamado-wrap {
+            width: min(100%, 270px);
+          }
+          .pit-display {
+            width: 120px;
+            padding: 8px 10px;
+          }
+          .pit-display strong {
+            font-size: 24px;
+          }
+          .fan-card {
+            left: 14px;
+            bottom: 20px;
+            min-width: 82px;
+            padding: 7px 8px;
+          }
+          .probe-slot {
+            padding: 9px;
+          }
+          .probe-reading strong {
+            font-size: 19px;
+          }
+        }
+
+        @container kamado-card (max-width: 350px) {
+          ha-card {
+            padding: 10px;
+          }
+          .version {
+            display: none;
+          }
+          .kamado-wrap {
+            width: min(100%, 245px);
+          }
+          .kamado-panel {
+            min-height: 255px;
+          }
+          .pit-display {
+            width: 112px;
+          }
+          .pit-display strong {
+            font-size: 22px;
+          }
+          .probe-index {
+            width: 32px;
+            height: 32px;
+          }
+        }
+
+        /* Fallback for browsers without container queries. */
         @media (max-width: 640px) {
           .layout { grid-template-columns: 1fr; }
-          .kamado-panel { min-height: 300px; }
-          .kamado-wrap { max-width: 300px; }
           .probe-slot { grid-template-columns: 1fr; }
-          .target, .number-target { width: 100%; }
+          .target, .number-target { width: 100%; min-width: 0; }
         }
       </style>
       <ha-card>
