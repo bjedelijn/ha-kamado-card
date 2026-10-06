@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#182018"/>
+      <stop offset="1" stop-color="#0f120f"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6f955e"/>
+      <stop offset="1" stop-color="#405f36"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="700" rx="32" fill="url(#bg)"/>
+  <text x="60" y="78" fill="#f1f5ef" font-family="Arial, sans-serif" font-size="34" font-weight="700">Grizzly Grill XL</text>
+  <text x="60" y="116" fill="#9bab98" font-family="Arial, sans-serif" font-size="18">Home Assistant Kamado Card</text>
+
+  <g transform="translate(78 160)" filter="url(#shadow)">
+    <rect x="0" y="0" width="500" height="470" rx="28" fill="#161b16" stroke="#303a30" stroke-width="2"/>
+    <g transform="translate(82 23)">
+      <path d="M104 329 L76 399 M232 329 L260 399 M88 368 H248" stroke="#7c827c" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <circle cx="75" cy="406" r="13" fill="#7c827c"/>
+      <circle cx="261" cy="406" r="13" fill="#7c827c"/>
+      <rect x="151" y="10" width="34" height="23" rx="5" fill="#4e554e"/>
+      <path d="M145 2h46l-7 13h-32z" fill="#787f78"/>
+      <path d="M61 154 C70 82 109 46 168 46 C227 46 266 82 275 154 Z" fill="url(#body)" stroke="#30472b" stroke-width="6"/>
+      <path d="M91 129 C104 80 133 60 168 59" fill="none" stroke="#a2bc96" stroke-width="5" opacity=".6"/>
+      <rect x="48" y="149" width="239" height="15" rx="6" fill="#4e554e"/>
+      <path d="M65 166 H271 C266 244 232 296 168 296 C104 296 70 244 65 166 Z" fill="url(#body)" stroke="#30472b" stroke-width="6"/>
+      <path d="M93 179 C98 238 120 270 153 284" fill="none" stroke="#a2bc96" stroke-width="5" opacity=".55"/>
+      <rect x="133" y="270" width="70" height="33" rx="8" fill="#4e554e"/>
+      <rect x="143" y="279" width="50" height="9" rx="4" fill="#838983"/>
+      <path d="M79 100 C49 101 32 113 27 126 H81 Z" fill="#4e554e"/>
+      <rect x="6" y="125" width="76" height="12" rx="6" fill="#7c827c"/>
+      <rect x="271" y="143" width="21" height="54" rx="8" fill="#4e554e"/>
+      <path d="M291 157 Q318 164 318 186 Q318 208 291 215 L291 201 Q304 195 304 186 Q304 177 291 171 Z" fill="#7c827c"/>
+    </g>
+
+    <g transform="translate(181 215)">
+      <rect x="0" y="0" width="138" height="74" rx="37" fill="#151815" stroke="#4b544b"/>
+      <text x="69" y="25" text-anchor="middle" fill="#9bab98" font-family="Arial, sans-serif" font-size="14">PIT</text>
+      <text x="69" y="57" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="31" font-weight="700">118 °C</text>
+    </g>
+
+    <g transform="translate(28 354)">
+      <rect width="112" height="76" rx="14" fill="#1d231d" stroke="#3c463c"/>
+      <circle cx="20" cy="23" r="6" fill="#52ad5b"/>
+      <text x="34" y="28" fill="#9bab98" font-family="Arial, sans-serif" font-size="13">FAN</text>
+      <text x="18" y="56" fill="#fff" font-family="Arial, sans-serif" font-size="22" font-weight="700">42 %</text>
+    </g>
+  </g>
+
+  <g transform="translate(618 160)">
+    <rect x="0" y="0" width="504" height="470" rx="28" fill="#161b16" stroke="#303a30" stroke-width="2"/>
+    <g font-family="Arial, sans-serif">
+      <g transform="translate(28 30)">
+        <rect width="448" height="84" rx="17" fill="#1c221c" stroke="#394139"/>
+        <circle cx="42" cy="42" r="24" fill="#557a46"/>
+        <text x="42" y="48" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">P1</text>
+        <text x="82" y="31" fill="#9bab98" font-size="14">Brisket</text>
+        <text x="82" y="60" fill="#fff" font-size="25" font-weight="700">67.4 °C</text>
+        <rect x="292" y="17" width="134" height="50" rx="11" fill="#252d25"/>
+        <text x="359" y="37" text-anchor="middle" fill="#9bab98" font-size="11">TARGET</text>
+        <text x="359" y="57" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">92 °C</text>
+      </g>
+      <g transform="translate(28 132)">
+        <rect width="448" height="84" rx="17" fill="#1c221c" stroke="#394139"/>
+        <circle cx="42" cy="42" r="24" fill="#557a46"/>
+        <text x="42" y="48" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">P2</text>
+        <text x="82" y="31" fill="#9bab98" font-size="14">Pulled pork</text>
+        <text x="82" y="60" fill="#fff" font-size="25" font-weight="700">74.8 °C</text>
+        <rect x="292" y="17" width="134" height="50" rx="11" fill="#252d25"/>
+        <text x="359" y="37" text-anchor="middle" fill="#9bab98" font-size="11">TARGET</text>
+        <text x="359" y="57" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">93 °C</text>
+      </g>
+      <g transform="translate(28 234)">
+        <rect width="448" height="84" rx="17" fill="#1c221c" stroke="#394139"/>
+        <circle cx="42" cy="42" r="24" fill="#557a46"/>
+        <text x="42" y="48" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">P3</text>
+        <text x="82" y="31" fill="#9bab98" font-size="14">Chicken</text>
+        <text x="82" y="60" fill="#fff" font-size="25" font-weight="700">61.2 °C</text>
+        <rect x="292" y="17" width="134" height="50" rx="11" fill="#252d25"/>
+        <text x="359" y="37" text-anchor="middle" fill="#9bab98" font-size="11">TARGET</text>
+        <text x="359" y="57" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">72 °C</text>
+      </g>
+      <g transform="translate(28 336)">
+        <rect width="448" height="84" rx="17" fill="#1c221c" stroke="#394139"/>
+        <circle cx="42" cy="42" r="24" fill="#557a46"/>
+        <text x="42" y="48" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">P4</text>
+        <text x="82" y="31" fill="#9bab98" font-size="14">Wireless</text>
+        <text x="82" y="60" fill="#fff" font-size="25" font-weight="700">25.0 °C</text>
+        <rect x="292" y="17" width="134" height="50" rx="11" fill="#252d25"/>
+        <text x="359" y="37" text-anchor="middle" fill="#9bab98" font-size="11">TARGET</text>
+        <text x="359" y="57" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">--</text>
+      </g>
+    </g>
+  </g>
+</svg>
