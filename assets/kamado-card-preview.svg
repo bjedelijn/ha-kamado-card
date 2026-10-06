@@ -27,7 +27,7 @@
       <path d="M145 2h46l-7 13h-32z" fill="#787f78"/>
       <path d="M61 154 C70 82 109 46 168 46 C227 46 266 82 275 154 Z" fill="url(#body)" stroke="#30472b" stroke-width="6"/>
       <path d="M91 129 C104 80 133 60 168 59" fill="none" stroke="#a2bc96" stroke-width="5" opacity=".6"/>
-      <rect x="48" y="149" width="239" height="15" rx="6" fill="#4e554e"/>
+      <rect x="48" y="149" width="239" height="15" rx="6" fill="#4e554e"/>\n      <path d="M70 168 H266 M82 175 H254" stroke="#8d968d" stroke-width="2" stroke-linecap="round" opacity=".85"/>
       <path d="M65 166 H271 C266 244 232 296 168 296 C104 296 70 244 65 166 Z" fill="url(#body)" stroke="#30472b" stroke-width="6"/>
       <path d="M93 179 C98 238 120 270 153 284" fill="none" stroke="#a2bc96" stroke-width="5" opacity=".55"/>
       <rect x="133" y="270" width="70" height="33" rx="8" fill="#4e554e"/>
@@ -38,7 +38,7 @@
       <path d="M291 157 Q318 164 318 186 Q318 208 291 215 L291 201 Q304 195 304 186 Q304 177 291 171 Z" fill="#7c827c"/>
     </g>
 
-    <g transform="translate(181 183)">
+    <g transform="translate(181 96)">
       <rect x="0" y="0" width="138" height="74" rx="37" fill="#151815" stroke="#4b544b"/>
       <text x="69" y="25" text-anchor="middle" fill="#9bab98" font-family="Arial, sans-serif" font-size="14">PIT</text>
       <text x="69" y="57" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="31" font-weight="700">118 °C</text>
