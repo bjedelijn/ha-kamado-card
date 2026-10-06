@@ -11,6 +11,7 @@ Initial release foundation:
 - fan output display and optional on/off control;
 - up to four assignable probe slots;
 - optional target entities with inline +/- control for Home Assistant `number` entities;
+- target-aware temperature states with near-target, reached/on-target and pit over-temperature colors;
 - built-in visual card configuration form;
 - Grizzly Grill XL and generic examples;
 - validation and tag-based release workflows.
