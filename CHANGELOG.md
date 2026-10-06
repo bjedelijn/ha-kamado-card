@@ -14,4 +14,6 @@ Initial release foundation:
 - target-aware temperature states with near-target, reached/on-target and pit over-temperature colors;
 - built-in visual card configuration form;
 - Grizzly Grill XL and generic examples;
+- responsive card-container layout for phones, tablets and dashboard columns;
+- touch-friendly controls for mobile use;
 - validation and tag-based release workflows.
