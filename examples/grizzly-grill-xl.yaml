@@ -1,0 +1,27 @@
+type: custom:ha-kamado-card
+title: Grizzly Grill XL
+kamado_color: "#557a46"
+
+# INKBIRD ISC-027BW controller
+pit_entity: sensor.inkbird_isc_027bw_pit_temperature
+pit_target_entity: number.inkbird_isc_027bw_set_pit_target_experimental
+fan_entity: sensor.inkbird_isc_027bw_fan_output
+fan_switch_entity: switch.inkbird_isc_027bw_fan_control_experimental
+
+# Probe slots can use entities from any thermometer/integration.
+probe_1_name: Meat 1
+probe_1_entity: sensor.inkbird_isc_027bw_meat_probe_1
+probe_1_target_entity: number.inkbird_isc_027bw_set_meat_probe_1_alarm_experimental
+
+probe_2_name: Meat 2
+probe_2_entity: sensor.inkbird_isc_027bw_meat_probe_2
+probe_2_target_entity: number.inkbird_isc_027bw_set_meat_probe_2_alarm_experimental
+
+probe_3_name: Meat 3
+probe_3_entity: sensor.inkbird_isc_027bw_meat_probe_3
+probe_3_target_entity: number.inkbird_isc_027bw_set_meat_probe_3_alarm_experimental
+
+# Optional fourth slot, for example an INT-14-BW wireless probe.
+probe_4_name: Wireless
+probe_4_entity: sensor.inkbird_int_14_bw_probe_1_core
+probe_4_target_entity: number.inkbird_int_14_bw_set_probe_1_target_temperature_experimental
