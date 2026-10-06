@@ -16,4 +16,4 @@ Initial release foundation:
 - Grizzly Grill XL and generic examples;
 - responsive card-container layout for phones, tablets and dashboard columns;
 - touch-friendly controls for mobile use;
-- validation and tag-based release workflows.
+- validation and automated version-tagged release workflow.
