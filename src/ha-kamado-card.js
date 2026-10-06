@@ -141,6 +141,54 @@ class HaKamadoCard extends HTMLElement {
     return this._state(entityId)?.attributes?.friendly_name || fallback || entityId || "";
   }
 
+  _numericState(entityId) {
+    const state = this._state(entityId);
+    if (!state || this._isUnavailable(entityId)) return null;
+    const value = Number(state.state);
+    return Number.isFinite(value) ? value : null;
+  }
+
+  _temperatureThresholds(entityId, targetEntityId) {
+    const unit = (
+      this._state(entityId)?.attributes?.unit_of_measurement ||
+      this._state(targetEntityId)?.attributes?.unit_of_measurement ||
+      ""
+    ).toUpperCase();
+
+    if (unit.includes("F")) {
+      return { near: 9, pitBand: 5, pitOver: 14 };
+    }
+
+    return { near: 5, pitBand: 3, pitOver: 8 };
+  }
+
+  _temperatureStatus(entityId, targetEntityId, isPit = false) {
+    const current = this._numericState(entityId);
+    const target = this._numericState(targetEntityId);
+    if (current === null || target === null) return "";
+
+    const { near, pitBand, pitOver } = this._temperatureThresholds(entityId, targetEntityId);
+
+    if (isPit) {
+      const delta = current - target;
+      if (Math.abs(delta) <= pitBand) return "reached";
+      if (delta > pitOver) return "over";
+      if (Math.abs(delta) <= near) return "near";
+      return "";
+    }
+
+    if (current >= target) return "reached";
+    if (target - current <= near) return "near";
+    return "";
+  }
+
+  _statusLabel(status, isPit = false) {
+    if (status === "reached") return isPit ? "On target" : "Reached";
+    if (status === "near") return "Almost";
+    if (status === "over") return "High";
+    return "";
+  }
+
   _numberMeta(entityId) {
     const state = this._state(entityId);
     if (!state || domainOf(entityId) !== "number") return null;
@@ -205,12 +253,14 @@ class HaKamadoCard extends HTMLElement {
     const unavailable = probe.entity ? this._isUnavailable(probe.entity) : true;
     const current = probe.entity ? this._formatValue(probe.entity) : "--";
     const name = probe.name || this._friendlyName(probe.entity, `Probe ${probe.slot}`);
+    const status = this._temperatureStatus(probe.entity, probe.targetEntity);
+    const statusLabel = this._statusLabel(status);
 
     return `
-      <section class="probe-slot${unavailable ? " unavailable" : ""}">
+      <section class="probe-slot${status ? ` ${status}` : ""}${unavailable ? " unavailable" : ""}">
         <button class="probe-reading entity-link" ${probe.entity ? `data-more-info="${escapeAttr(probe.entity)}"` : "disabled"}>
           <span class="probe-index">P${probe.slot}</span>
-          <span class="probe-name">${escapeHtml(name)}</span>
+          <span class="probe-name">${escapeHtml(name)}${statusLabel ? ` · ${escapeHtml(statusLabel)}` : ""}</span>
           <strong>${escapeHtml(current)}</strong>
         </button>
         ${this._renderTarget(probe.targetEntity, "Target")}
@@ -229,6 +279,8 @@ class HaKamadoCard extends HTMLElement {
     const fanEntity = this._config.fan_entity;
     const fanSwitchEntity = this._config.fan_switch_entity;
     const pitValue = pitEntity ? this._formatValue(pitEntity) : "--";
+    const pitStatus = this._temperatureStatus(pitEntity, pitTargetEntity, true);
+    const pitStatusLabel = this._statusLabel(pitStatus, true);
     const fanValue = fanEntity ? this._formatValue(fanEntity) : "--";
     const fanState = this._state(fanSwitchEntity);
     const fanOn = fanState?.state === "on";
@@ -314,6 +366,22 @@ class HaKamadoCard extends HTMLElement {
         }
         .pit-display span, .fan-card span, .target span { display: block; color: var(--muted); font-size: 11px; }
         .pit-display strong { display: block; font-size: 28px; line-height: 1.05; color: var(--primary-text-color); }
+        .pit-display.near {
+          border-color: var(--warning-color, #f9a825);
+          background: color-mix(in srgb, var(--warning-color, #f9a825) 14%, var(--card-background-color, #fff));
+        }
+        .pit-display.near strong { color: var(--warning-color, #f9a825); }
+        .pit-display.reached {
+          border-color: var(--success-color, #43a047);
+          background: color-mix(in srgb, var(--success-color, #43a047) 14%, var(--card-background-color, #fff));
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--success-color, #43a047) 15%, transparent), 0 6px 24px rgba(0,0,0,.12);
+        }
+        .pit-display.reached strong { color: var(--success-color, #43a047); }
+        .pit-display.over {
+          border-color: var(--error-color, #db4437);
+          background: color-mix(in srgb, var(--error-color, #db4437) 12%, var(--card-background-color, #fff));
+        }
+        .pit-display.over strong { color: var(--error-color, #db4437); }
         button { font: inherit; color: inherit; }
         .entity-link { cursor: pointer; }
         .pit-button {
@@ -373,6 +441,24 @@ class HaKamadoCard extends HTMLElement {
           border-radius: 14px;
           background: var(--surface);
         }
+        .probe-slot.near {
+          border-color: var(--warning-color, #f9a825);
+          background: color-mix(in srgb, var(--warning-color, #f9a825) 8%, var(--surface));
+        }
+        .probe-slot.reached {
+          border-color: var(--success-color, #43a047);
+          background: color-mix(in srgb, var(--success-color, #43a047) 9%, var(--surface));
+        }
+        .probe-slot.near .probe-index {
+          background: var(--warning-color, #f9a825);
+          border-color: color-mix(in srgb, var(--warning-color, #f9a825) 75%, black);
+        }
+        .probe-slot.reached .probe-index {
+          background: var(--success-color, #43a047);
+          border-color: color-mix(in srgb, var(--success-color, #43a047) 75%, black);
+        }
+        .probe-slot.near .probe-reading strong { color: var(--warning-color, #f9a825); }
+        .probe-slot.reached .probe-reading strong { color: var(--success-color, #43a047); }
         .probe-slot.unavailable { opacity: .65; }
         .probe-reading {
           border: 0;
@@ -484,9 +570,9 @@ class HaKamadoCard extends HTMLElement {
                 <rect class="metal-dark" x="247" y="121" width="18" height="46" rx="7" />
                 <path class="metal" d="M264 133 Q286 139 286 158 Q286 177 264 183 L264 171 Q275 166 275 158 Q275 150 264 145 Z" />
               </svg>
-              <div class="pit-display">
+              <div class="pit-display${pitStatus ? ` ${pitStatus}` : ""}">
                 <button class="pit-button entity-link" ${pitEntity ? `data-more-info="${escapeAttr(pitEntity)}"` : "disabled"}>
-                  <span>Pit</span>
+                  <span>Pit${pitStatusLabel ? ` · ${escapeHtml(pitStatusLabel)}` : ""}</span>
                   <strong>${escapeHtml(pitValue)}</strong>
                 </button>
               </div>
