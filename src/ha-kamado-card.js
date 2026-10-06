@@ -291,6 +291,8 @@ class HaKamadoCard extends HTMLElement {
       <style>
         :host {
           display: block;
+          container-type: inline-size;
+          container-name: kamado-card;
           --kamado-color: ${DEFAULT_COLOR};
           --kamado-dark: color-mix(in srgb, var(--kamado-color) 72%, black);
           --kamado-light: color-mix(in srgb, var(--kamado-color) 70%, white);
@@ -302,8 +304,6 @@ class HaKamadoCard extends HTMLElement {
           overflow: hidden;
           padding: 16px;
           background: var(--ha-card-background, var(--card-background-color, #fff));
-          container-type: inline-size;
-          container-name: kamado-card;
         }
         .header {
           display: flex;
@@ -502,6 +502,7 @@ class HaKamadoCard extends HTMLElement {
           border: 0;
           border-radius: 10px;
           min-width: 116px;
+          min-height: 44px;
           background: var(--secondary-background-color, rgba(127,127,127,.1));
           padding: 7px 10px;
           text-align: center;
