@@ -15,7 +15,9 @@ The card works with normal Home Assistant entities and is not tied to a specific
 - optional pit target with inline +/- buttons for `number` entities;
 - up to four freely assignable probe slots;
 - optional target per probe;
-- responsive desktop/tablet/mobile layout;
+- target-aware status colors: orange when close, green when reached, and pit over-temperature warning;
+- responsive desktop/tablet/mobile layout based on actual card-container width;
+- touch-friendly controls sized for phones and tablets;
 - built-in Home Assistant visual card configuration form;
 - HACS-compatible `dist/ha-kamado-card.js` package.
 
@@ -92,6 +94,12 @@ A fourth slot can point to any other temperature entity, for example a wireless 
 | `probe_1_name` ... `probe_4_name` | No | Friendly label for each probe slot. |
 
 When a target is a Home Assistant `number` entity, the card shows **- / +** controls and respects its `min`, `max` and `step` values.
+
+Temperature status is calculated automatically when both a current-temperature entity and target entity contain numeric values. Meat probes turn **orange** when they are close to target and **green** when the target is reached. The pit display turns **green** while it is in the target band and **red** when it is clearly above target. Thresholds are unit-aware for Celsius and Fahrenheit.
+
+## Responsive layout
+
+The card adapts to the **actual Home Assistant card width**, not only to the browser viewport. This keeps it usable on iPhone-sized screens, Android phones, tablets, wall panels, and narrow dashboard columns. Wide cards use a side-by-side kamado/probe layout; narrow cards stack vertically and reduce visual spacing while keeping touch controls at least 44 px high.
 
 ## Design philosophy
 

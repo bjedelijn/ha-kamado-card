@@ -111,7 +111,7 @@ class HaKamadoCard extends HTMLElement {
       rows: 6,
       min_rows: 5,
       columns: 12,
-      min_columns: 6,
+      min_columns: 4,
     };
   }
 
@@ -139,6 +139,54 @@ class HaKamadoCard extends HTMLElement {
 
   _friendlyName(entityId, fallback) {
     return this._state(entityId)?.attributes?.friendly_name || fallback || entityId || "";
+  }
+
+  _numericState(entityId) {
+    const state = this._state(entityId);
+    if (!state || this._isUnavailable(entityId)) return null;
+    const value = Number(state.state);
+    return Number.isFinite(value) ? value : null;
+  }
+
+  _temperatureThresholds(entityId, targetEntityId) {
+    const unit = (
+      this._state(entityId)?.attributes?.unit_of_measurement ||
+      this._state(targetEntityId)?.attributes?.unit_of_measurement ||
+      ""
+    ).toUpperCase();
+
+    if (unit.includes("F")) {
+      return { near: 9, pitBand: 5, pitOver: 14 };
+    }
+
+    return { near: 5, pitBand: 3, pitOver: 8 };
+  }
+
+  _temperatureStatus(entityId, targetEntityId, isPit = false) {
+    const current = this._numericState(entityId);
+    const target = this._numericState(targetEntityId);
+    if (current === null || target === null) return "";
+
+    const { near, pitBand, pitOver } = this._temperatureThresholds(entityId, targetEntityId);
+
+    if (isPit) {
+      const delta = current - target;
+      if (Math.abs(delta) <= pitBand) return "reached";
+      if (delta > pitOver) return "over";
+      if (Math.abs(delta) <= near) return "near";
+      return "";
+    }
+
+    if (current >= target) return "reached";
+    if (target - current <= near) return "near";
+    return "";
+  }
+
+  _statusLabel(status, isPit = false) {
+    if (status === "reached") return isPit ? "On target" : "Reached";
+    if (status === "near") return "Almost";
+    if (status === "over") return "High";
+    return "";
   }
 
   _numberMeta(entityId) {
@@ -205,12 +253,14 @@ class HaKamadoCard extends HTMLElement {
     const unavailable = probe.entity ? this._isUnavailable(probe.entity) : true;
     const current = probe.entity ? this._formatValue(probe.entity) : "--";
     const name = probe.name || this._friendlyName(probe.entity, `Probe ${probe.slot}`);
+    const status = this._temperatureStatus(probe.entity, probe.targetEntity);
+    const statusLabel = this._statusLabel(status);
 
     return `
-      <section class="probe-slot${unavailable ? " unavailable" : ""}">
+      <section class="probe-slot${status ? ` ${status}` : ""}${unavailable ? " unavailable" : ""}">
         <button class="probe-reading entity-link" ${probe.entity ? `data-more-info="${escapeAttr(probe.entity)}"` : "disabled"}>
           <span class="probe-index">P${probe.slot}</span>
-          <span class="probe-name">${escapeHtml(name)}</span>
+          <span class="probe-name">${escapeHtml(name)}${statusLabel ? ` · ${escapeHtml(statusLabel)}` : ""}</span>
           <strong>${escapeHtml(current)}</strong>
         </button>
         ${this._renderTarget(probe.targetEntity, "Target")}
@@ -229,6 +279,8 @@ class HaKamadoCard extends HTMLElement {
     const fanEntity = this._config.fan_entity;
     const fanSwitchEntity = this._config.fan_switch_entity;
     const pitValue = pitEntity ? this._formatValue(pitEntity) : "--";
+    const pitStatus = this._temperatureStatus(pitEntity, pitTargetEntity, true);
+    const pitStatusLabel = this._statusLabel(pitStatus, true);
     const fanValue = fanEntity ? this._formatValue(fanEntity) : "--";
     const fanState = this._state(fanSwitchEntity);
     const fanOn = fanState?.state === "on";
@@ -239,6 +291,8 @@ class HaKamadoCard extends HTMLElement {
       <style>
         :host {
           display: block;
+          container-type: inline-size;
+          container-name: kamado-card;
           --kamado-color: ${DEFAULT_COLOR};
           --kamado-dark: color-mix(in srgb, var(--kamado-color) 72%, black);
           --kamado-light: color-mix(in srgb, var(--kamado-color) 70%, white);
@@ -314,11 +368,28 @@ class HaKamadoCard extends HTMLElement {
         }
         .pit-display span, .fan-card span, .target span { display: block; color: var(--muted); font-size: 11px; }
         .pit-display strong { display: block; font-size: 28px; line-height: 1.05; color: var(--primary-text-color); }
+        .pit-display.near {
+          border-color: var(--warning-color, #f9a825);
+          background: color-mix(in srgb, var(--warning-color, #f9a825) 14%, var(--card-background-color, #fff));
+        }
+        .pit-display.near strong { color: var(--warning-color, #f9a825); }
+        .pit-display.reached {
+          border-color: var(--success-color, #43a047);
+          background: color-mix(in srgb, var(--success-color, #43a047) 14%, var(--card-background-color, #fff));
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--success-color, #43a047) 15%, transparent), 0 6px 24px rgba(0,0,0,.12);
+        }
+        .pit-display.reached strong { color: var(--success-color, #43a047); }
+        .pit-display.over {
+          border-color: var(--error-color, #db4437);
+          background: color-mix(in srgb, var(--error-color, #db4437) 12%, var(--card-background-color, #fff));
+        }
+        .pit-display.over strong { color: var(--error-color, #db4437); }
         button { font: inherit; color: inherit; }
         .entity-link { cursor: pointer; }
         .pit-button {
           border: 0;
           width: 100%;
+          min-height: 44px;
           background: none;
           padding: 0;
         }
@@ -351,7 +422,7 @@ class HaKamadoCard extends HTMLElement {
           margin-top: 6px;
           border: 0;
           border-radius: 9px;
-          min-height: 32px;
+          min-height: 44px;
           background: var(--secondary-background-color, rgba(127,127,127,.12));
           cursor: pointer;
         }
@@ -373,11 +444,30 @@ class HaKamadoCard extends HTMLElement {
           border-radius: 14px;
           background: var(--surface);
         }
+        .probe-slot.near {
+          border-color: var(--warning-color, #f9a825);
+          background: color-mix(in srgb, var(--warning-color, #f9a825) 8%, var(--surface));
+        }
+        .probe-slot.reached {
+          border-color: var(--success-color, #43a047);
+          background: color-mix(in srgb, var(--success-color, #43a047) 9%, var(--surface));
+        }
+        .probe-slot.near .probe-index {
+          background: var(--warning-color, #f9a825);
+          border-color: color-mix(in srgb, var(--warning-color, #f9a825) 75%, black);
+        }
+        .probe-slot.reached .probe-index {
+          background: var(--success-color, #43a047);
+          border-color: color-mix(in srgb, var(--success-color, #43a047) 75%, black);
+        }
+        .probe-slot.near .probe-reading strong { color: var(--warning-color, #f9a825); }
+        .probe-slot.reached .probe-reading strong { color: var(--success-color, #43a047); }
         .probe-slot.unavailable { opacity: .65; }
         .probe-reading {
           border: 0;
           background: transparent;
           min-width: 0;
+          min-height: 44px;
           text-align: left;
           display: grid;
           grid-template-columns: auto 1fr auto;
@@ -412,6 +502,7 @@ class HaKamadoCard extends HTMLElement {
           border: 0;
           border-radius: 10px;
           min-width: 116px;
+          min-height: 44px;
           background: var(--secondary-background-color, rgba(127,127,127,.1));
           padding: 7px 10px;
           text-align: center;
@@ -419,24 +510,28 @@ class HaKamadoCard extends HTMLElement {
         .target strong { font-size: 15px; }
         .number-target {
           display: grid;
-          grid-template-columns: 30px 1fr 30px;
+          grid-template-columns: 44px minmax(0, 1fr) 44px;
           gap: 3px;
           padding: 3px;
-          min-width: 158px;
+          min-width: 170px;
         }
         .target-value {
           border: 0;
+          min-height: 44px;
           background: transparent;
           border-radius: 8px;
           padding: 2px 4px;
         }
         .adjust {
           border: 0;
+          min-width: 44px;
+          min-height: 44px;
           border-radius: 8px;
           background: color-mix(in srgb, var(--primary-text-color) 8%, transparent);
           cursor: pointer;
           font-size: 20px;
           line-height: 1;
+          touch-action: manipulation;
         }
         .adjust:hover, .fan-toggle:hover, .entity-link:hover { filter: brightness(.96); }
         .unavailable { opacity: .52; }
@@ -450,12 +545,95 @@ class HaKamadoCard extends HTMLElement {
           border-radius: 14px;
           padding: 20px;
         }
+        @container kamado-card (max-width: 620px) {
+          .layout {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+          .kamado-panel {
+            min-height: 300px;
+          }
+          .kamado-wrap {
+            width: min(100%, 300px);
+          }
+          .probe-slot {
+            grid-template-columns: 1fr;
+          }
+          .target,
+          .number-target {
+            width: 100%;
+            min-width: 0;
+          }
+        }
+
+        @container kamado-card (max-width: 420px) {
+          ha-card {
+            padding: 12px;
+          }
+          .header {
+            margin-bottom: 8px;
+          }
+          .title {
+            font-size: 18px;
+          }
+          .kamado-panel {
+            min-height: 275px;
+            padding: 8px;
+          }
+          .kamado-wrap {
+            width: min(100%, 270px);
+          }
+          .pit-display {
+            width: 120px;
+            padding: 8px 10px;
+          }
+          .pit-display strong {
+            font-size: 24px;
+          }
+          .fan-card {
+            left: 14px;
+            bottom: 20px;
+            min-width: 82px;
+            padding: 7px 8px;
+          }
+          .probe-slot {
+            padding: 9px;
+          }
+          .probe-reading strong {
+            font-size: 19px;
+          }
+        }
+
+        @container kamado-card (max-width: 350px) {
+          ha-card {
+            padding: 10px;
+          }
+          .version {
+            display: none;
+          }
+          .kamado-wrap {
+            width: min(100%, 245px);
+          }
+          .kamado-panel {
+            min-height: 255px;
+          }
+          .pit-display {
+            width: 112px;
+          }
+          .pit-display strong {
+            font-size: 22px;
+          }
+          .probe-index {
+            width: 32px;
+            height: 32px;
+          }
+        }
+
+        /* Fallback for browsers without container queries. */
         @media (max-width: 640px) {
           .layout { grid-template-columns: 1fr; }
-          .kamado-panel { min-height: 300px; }
-          .kamado-wrap { max-width: 300px; }
           .probe-slot { grid-template-columns: 1fr; }
-          .target, .number-target { width: 100%; }
+          .target, .number-target { width: 100%; min-width: 0; }
         }
       </style>
       <ha-card>
@@ -484,9 +662,9 @@ class HaKamadoCard extends HTMLElement {
                 <rect class="metal-dark" x="247" y="121" width="18" height="46" rx="7" />
                 <path class="metal" d="M264 133 Q286 139 286 158 Q286 177 264 183 L264 171 Q275 166 275 158 Q275 150 264 145 Z" />
               </svg>
-              <div class="pit-display">
+              <div class="pit-display${pitStatus ? ` ${pitStatus}` : ""}">
                 <button class="pit-button entity-link" ${pitEntity ? `data-more-info="${escapeAttr(pitEntity)}"` : "disabled"}>
-                  <span>Pit</span>
+                  <span>Pit${pitStatusLabel ? ` · ${escapeHtml(pitStatusLabel)}` : ""}</span>
                   <strong>${escapeHtml(pitValue)}</strong>
                 </button>
               </div>
