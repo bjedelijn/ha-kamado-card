@@ -301,7 +301,7 @@ class HaKamadoCard extends HTMLElement {
         .pit-display {
           position: absolute;
           left: 50%;
-          top: 44%;
+          top: 34%;
           transform: translate(-50%, -50%);
           width: 132px;
           border-radius: 999px;
