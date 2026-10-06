@@ -1,0 +1,14 @@
+{
+  "name": "ha-kamado-card",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A customizable Home Assistant Lovelace card for kamado BBQs.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node --check src/ha-kamado-card.js && npm run build && git diff --exit-code -- dist/ha-kamado-card.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

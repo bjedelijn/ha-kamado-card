@@ -1,0 +1,12 @@
+type: custom:ha-kamado-card
+title: Kamado
+kamado_color: "#8b1e1e"
+pit_entity: sensor.kamado_pit_temperature
+pit_target_entity: number.kamado_pit_target
+fan_entity: sensor.kamado_fan_output
+fan_switch_entity: switch.kamado_fan
+probe_1_name: Brisket
+probe_1_entity: sensor.brisket_core_temperature
+probe_1_target_entity: number.brisket_target_temperature
+probe_2_name: Ambient
+probe_2_entity: sensor.grill_ambient_temperature
