@@ -4,6 +4,8 @@ A self-contained Home Assistant dashboard card for kamado BBQs. It combines a re
 
 The card works with normal Home Assistant entities and is not tied to a specific BBQ integration. It pairs naturally with [bjedelijn/ha-inkbird-bbq](https://github.com/bjedelijn/ha-inkbird-bbq).
 
+![Kamado Card preview](assets/kamado-card-preview.svg)
+
 ## Features
 
 - inline SVG kamado with no external image assets;
