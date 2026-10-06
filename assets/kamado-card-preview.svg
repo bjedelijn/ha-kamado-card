@@ -38,7 +38,7 @@
       <path d="M291 157 Q318 164 318 186 Q318 208 291 215 L291 201 Q304 195 304 186 Q304 177 291 171 Z" fill="#7c827c"/>
     </g>
 
-    <g transform="translate(181 96)">
+    <g transform="translate(181 78)">
       <rect x="0" y="0" width="138" height="74" rx="37" fill="#151815" stroke="#4b544b"/>
       <text x="69" y="25" text-anchor="middle" fill="#9bab98" font-family="Arial, sans-serif" font-size="14">PIT</text>
       <text x="69" y="57" text-anchor="middle" fill="#fff" font-family="Arial, sans-serif" font-size="31" font-weight="700">118 °C</text>
