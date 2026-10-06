@@ -301,7 +301,7 @@ class HaKamadoCard extends HTMLElement {
         .pit-display {
           position: absolute;
           left: 50%;
-          top: 52%;
+          top: 44%;
           transform: translate(-50%, -50%);
           width: 132px;
           border-radius: 999px;
@@ -474,7 +474,7 @@ class HaKamadoCard extends HTMLElement {
                 <path class="metal" d="M140 12h40l-6 10h-28z" />
                 <path class="ceramic" d="M70 131 C78 73 112 43 160 43 C208 43 242 73 250 131 Z" />
                 <path class="ceramic-highlight" d="M96 112 C107 72 130 56 160 55" />
-                <rect class="metal-dark" x="59" y="126" width="202" height="13" rx="5" />
+                <rect class="metal-dark" x="59" y="126" width="202" height="13" rx="5" />\n                <path d="M91 145 H229 M101 151 H219" stroke="color-mix(in srgb, var(--primary-text-color) 35%, transparent)" stroke-width="2" stroke-linecap="round" />
                 <path class="ceramic" d="M73 140 H247 C243 205 214 249 160 249 C106 249 77 205 73 140 Z" />
                 <path class="ceramic-highlight" d="M96 151 C100 200 118 226 145 237" />
                 <rect class="metal-dark" x="131" y="225" width="58" height="28" rx="7" />
