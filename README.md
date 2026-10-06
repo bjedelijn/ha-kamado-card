@@ -116,7 +116,7 @@ Source lives in `src/ha-kamado-card.js`. The HACS distribution file lives in `di
 
 ## Releases
 
-Version tags use the form `v0.1.0`. Pushing a `v*` tag validates the distribution file and creates a GitHub Release.
+Versions use the form `v0.1.0`. After a successful **Validate** run on `main`, the release workflow reads the version from `package.json`. If that version has not been released yet, it creates the version tag and publishes a GitHub Release using the matching section from `CHANGELOG.md`.
 
 ## License
 
